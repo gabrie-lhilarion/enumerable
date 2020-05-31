@@ -82,8 +82,6 @@ end
 
 end
 
-de_arr = [2, 3, 1, 12, 30, 4 ]
-puts de_arr.my_all?{ |x| x < 3}
 
 def multiply_els(arr)
   arr.my_inject {|x, y| x * y}
