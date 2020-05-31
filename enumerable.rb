@@ -6,9 +6,20 @@ def my_each
 end
 
 def my_each_with_index
-   # if the ser does not provide an block, provide an enum
-   return self.to_enum unless block_given?
-   self.length.times  { |index| yield( self[index], index ) }
+  return self.to_enum unless block_given?
+  self.length.times  { |index| yield( self[index], index ) }
+end
+
+def my_select
+    new_array =[]
+    self.my_each {|a|  new_array << a  if yield(a) }
+    new_array
+end
+
+def my_all?
+
+  self.my_select {|i| yield(i)} == self
+
 end
 
 end
