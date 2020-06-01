@@ -146,9 +146,7 @@ end
 
 end
 
-p [1, 2, 3, 4, 5].my_each_emma { |num| num < 4}
-p [1, 2, 3, 4, 5].my_each { |num| num < 4}
-p [1, 2, 3, 4, 5].each { |num| num < 4}
+
 
 def multiply_els(arr)
   arr.my_inject {|x, y| x * y}
