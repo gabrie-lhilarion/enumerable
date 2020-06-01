@@ -1,25 +1,66 @@
 module Enumerable
 
 def my_each
-  return self.to_enum unless block_given?
-  self.length.times  { |x| yield( self[x] ) }
-end
+   if block_given?
+     counter = 0
+     while counter < length
+       yield self[counter]
+       counter += 1
+     end
+     self
+   else
+     to_enum
+   end
+ end
 
-def my_each_with_index
-  return self.to_enum unless block_given?
-  self.length.times  { |index| yield( self[index], index ) }
-end
+ def my_each_with_index
+   if block_given?
+     index = -1
+     my_each do |value|
+       yield value, index += 1
+     end
+     self
+   else
+     to_enum
+   end
+ end
 
-def my_select
-    new_array =[]
-    self.my_each {|a|  new_array << a  if yield(a) }
-    new_array
-end
+ def my_select
+     if block_given?
+       new_array = []
+       my_each { |value| new_array << value if yield value }
+       new_array
+     else
+       to_enum
+     end
+ end
 
-def my_all?
+def my_all?(param = nil)
+  if !param.nil?
+    if param.is_a? Class
+      my_each do |val|
+        return false unless val.is_a? param
+      end
+    elsif param.is_a? Regexp
+      my_each do |val|
+        return false unless val.to_s.match(param)
+      end
+    else
+      my_each do |val|
+        return false unless val == param
+      end
+    end
 
-  self.my_select {|i| yield(i)} == self
-
+  elsif block_given?
+    my_each do |val|
+      return false unless yield(val)
+    end
+  elsif !block_given? && param.nil?
+    my_each do |val|
+      return false if val.nil? || !val
+    end
+  end
+  true
 end
 
 
@@ -35,8 +76,31 @@ def my_any?(*arg)
   result
 end
 
-def my_none?
-  !self.my_all {|i| yield(i)}
+def my_none?(param = nil)
+  if !param.nil?
+    if param.is_a? Class
+      my_each do |val|
+        return false if val.is_a? param
+      end
+    elsif param.is_a? Regexp
+      my_each do |val|
+        return false if val.to_s.match(param)
+      end
+    else
+      my_each do |val|
+        return false if val
+      end
+    end
+  elsif block_given?
+    my_each do |val|
+      return false if yield(val)
+    end
+  elsif !block_given? && param.nil?
+    my_each do |val|
+      return false if !val.nil? || val
+    end
+  end
+  true
 end
 
 def my_count(n = nil)
@@ -81,6 +145,10 @@ def my_inject(*arg)
 end
 
 end
+
+p [1, 2, 3, 4, 5].my_each_emma { |num| num < 4}
+p [1, 2, 3, 4, 5].my_each { |num| num < 4}
+p [1, 2, 3, 4, 5].each { |num| num < 4}
 
 def multiply_els(arr)
   arr.my_inject {|x, y| x * y}
