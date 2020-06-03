@@ -1,3 +1,6 @@
+# rubocop:disable  Metrics/ModuleLength
+# rubocop:disable Metrics/CyclomaticComplexity
+# rubocop:disable  Metrics/PerceivedComplexity
 module Enumerable
   def my_each
     array_enum = is_a?(Range) ? to_a : self
@@ -149,7 +152,9 @@ module Enumerable
     result
   end
 end
-
+# rubocop:enable  Metrics/ModuleLength
+# rubocop:enable Metrics/CyclomaticComplexity
+# rubocop:enable  Metrics/PerceivedComplexity
 def multiply_els(arr)
   arr.my_inject { |x, y| x * y }
 end
