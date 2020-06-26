@@ -8,7 +8,7 @@ describe Enumerable do
   let(:mixVal) { [nil, true, 99] }
   let(:hash) { {} }
   let(:emptyArr) { [] }
-  let(:proc) { Proc.new { |val| val * 3 } }
+  let(:proc) { Proc { |val| val * 3 } }
   describe '#my_each' do
     context 'when no block is given' do
       it 'should return enumerable' do
